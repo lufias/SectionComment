@@ -3,6 +3,7 @@
   "displayName": "SectionComment",
   "description": "Generate clear ascii text comment to highlight section of code",
   "version": "0.0.1",
+  "publisher": "LufiasDev",
   "engines": {
     "vscode": "^1.91.0"
   },
@@ -13,6 +14,11 @@
     "onCommand:sectioncomment.createSectionComment"
   ],
   "main": "./extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lufias/SectionComment.git",
+    "directory": "master"
+  },
   "contributes": {
     "commands": [{
       "command": "sectioncomment.createSectionComment",
