@@ -2,7 +2,7 @@
   "name": "sectioncomment",
   "displayName": "SectionComment",
   "description": "Generate clear ascii text comment to highlight section of code",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "LufiasDev",
   "engines": {
     "vscode": "^1.91.0"
