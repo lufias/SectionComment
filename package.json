@@ -8,7 +8,10 @@
   },
   "categories": [
     "Other"
-  ], 
+  ],
+  "activationEvents": [
+    "onCommand:sectioncomment.createSectionComment"
+  ],
   "main": "./extension.js",
   "contributes": {
     "commands": [{
