@@ -2,7 +2,7 @@
   "name": "sectioncomment",
   "displayName": "SectionComment",
   "description": "Generate clear ascii text comment to highlight section of code",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "publisher": "LufiasDev",
   "engines": {
     "vscode": "^1.91.0"
@@ -11,7 +11,9 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:sectioncomment.createSectionComment"
+    "onCommand:SectionComment-Create",
+    "onCommand:SectionComment-CreateWithFooter",
+    "onCommand:SectionComment-Bordered"
   ],
   "main": "./extension.js",
   "repository": {
@@ -20,10 +22,20 @@
     "directory": "master"
   },
   "contributes": {
-    "commands": [{
-      "command": "sectioncomment.createSectionComment",
-      "title": "Create Section Comment"
-    }]
+    "commands": [
+      {
+        "command": "SectionComment-Create",
+        "title": "SectionComment-Create"
+      },
+      {
+        "command": "SectionComment-CreateWithFooter",
+        "title": "SectionComment-Create with Footer"
+      },
+      {
+        "command": "SectionComment-Bordered",
+        "title": "SectionComment-Create with Border"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",

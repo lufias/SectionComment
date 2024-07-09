@@ -1,25 +1,52 @@
 const vscode = require('vscode');
 
-function activate(context) {
-    let disposable = vscode.commands.registerCommand('sectioncomment.createSectionComment', function () {
-        const editor = vscode.window.activeTextEditor;
-        if (editor) {
-            const doc = editor.document;
-            const selection = editor.selection;
-            const text = doc.getText(selection);
+function createSectionComment(withFooter) {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const doc = editor.document;
+        const selection = editor.selection;
+        const text = doc.getText(selection);
 
-            const asciiArtComment = generateAsciiArtComment(text);
+        const asciiArtComment = generateAsciiArtComment(text, withFooter);
 
-            editor.edit(editBuilder => {
-                editBuilder.replace(selection, asciiArtComment);
-            });
-        }
-    });
-
-    context.subscriptions.push(disposable);
+        editor.edit(editBuilder => {
+            editBuilder.replace(selection, asciiArtComment);
+        });
+    }
 }
 
-function generateAsciiArtComment(text) {
+function createBorderedSectionComment() {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        const doc = editor.document;
+        const selection = editor.selection;
+        const text = doc.getText(selection);
+
+        const asciiArtComment = generateBorderedAsciiArtComment(text);
+
+        editor.edit(editBuilder => {
+            editBuilder.replace(selection, asciiArtComment);
+        });
+    }
+}
+
+function activate(context) {
+    let disposableWithoutFooter = vscode.commands.registerCommand('SectionComment-Create', function () {
+        createSectionComment(false);
+    });
+
+    let disposableWithFooter = vscode.commands.registerCommand('SectionComment-CreateWithFooter', function () {
+        createSectionComment(true);
+    });
+
+    let disposableBordered = vscode.commands.registerCommand('SectionComment-Bordered', function () {
+        createBorderedSectionComment();
+    });
+
+    context.subscriptions.push(disposableWithoutFooter, disposableWithFooter, disposableBordered);
+}
+
+function generateAsciiArtComment(text, withFooter) {
     const asciiArt = {
         'A': [
             '   A   ',
@@ -374,19 +401,35 @@ function generateAsciiArtComment(text) {
     };
 
     let result = '';
-    for (let i = 0; i < 5; i++) {  // Assuming 5 lines height for ASCII art
+    for (let i = 0; i < 5; i++) {
         for (let char of text) {
             if (asciiArt[char.toUpperCase()]) {
-                result += asciiArt[char.toUpperCase()][i] + '  '; // Add an extra space between characters
+                result += asciiArt[char.toUpperCase()][i] + ' '; // Only one space between characters
             } else {
-                result += ' '.repeat(7);  // Space for unknown characters
+                result += ' '.repeat(6); // Reduced space for unknown characters
             }
         }
         result += '\n';
     }
 
+    // Append the footer text if withFooter is true
+    if (withFooter) {
+        result += '\nGenerated with SectionComment extension\n';
+    }
+
     return `/*\n${result}*/`;
 }
+
+function generateBorderedAsciiArtComment(text) {
+    const asciiArt = generateAsciiArtComment(text, false); // Using existing function to generate the main content
+    const lines = asciiArt.split('\n');
+    const borderLength = Math.max(80, lines[1].length); // Ensure the border line is at least 80 characters long or follows the ASCII art length
+    const border = '='.repeat(borderLength);
+
+    return `/*\n${border}\n\n${lines.slice(1, -1).join('\n')}\n\n${border}\nGenerated with SectionComment extension\n*/`;
+}
+
+
 
 function deactivate() {}
 
